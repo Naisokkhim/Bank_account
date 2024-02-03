@@ -1,16 +1,16 @@
-public class User extends EmployeeInfomation{
+import java.util.ArrayList;
 
-    public String UserAuthentication(String UserName,String Password){
-
-        String post;
-        if(UserName.equals("TestManager") && Password.equals("Test123")){
-            return post = "Manager";
+public class User {
+    public String UserAuthentication(String UserName, String Password, ArrayList<EmployeeInfomation> em) {
+        for (EmployeeInfomation ems: em) {
+            if(UserName.equals("TestManager") && Password.equals("Test123")){
+                return "Manager";
+            }
+            if (UserName.equalsIgnoreCase(ems.getName()) && Password.equals("Test321")){
+                return ems.getName();
+            }
         }
-        else if (UserName.equals("TestEmployee") && Password.equals("Test321")){
-            return post = "Employee";
-        }else{
-            System.out.println("Wrong username or password !!");
-            return post = "";
-        }
+        System.out.println("Invalid username or password !!");
+        return "Invalid";
     }
 }

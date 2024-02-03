@@ -48,11 +48,15 @@ public class EmployeeInfomation {
     }
 
     public void Show(ArrayList<EmployeeInfomation> employees){
-            System.out.printf("|%-20s |%-20s |%-20s |%-20s |%-10s%n", "Name|", "Preference|", "Skill|", "Work Hours|","Availablity|"+"\n");
+        System.out.println("|---------------------|---------------------|---------------------|------------|------------|");
+            System.out.printf("|%-20s |%-20s |%-20s |%-11s |%-12s|%n", "Name", "Preference", "Skill", "Work Hours","Availablity");
+        System.out.println("|---------------------|---------------------|---------------------|------------|------------|");
             for (EmployeeInfomation e : employees) {
-                System.out.printf("|%-20s |%-20s |%-20s |%-20s |%-10s%n", e.getName(), e.getPreferences(), e.getSkill(), e.getWorkHour(),e.isAvailability() ? "Yes" : "No");
+                System.out.printf("|%-20s |%-20s |%-20s |%-11s |%-12s|%n", e.getName(), e.getPreferences(), e.getSkill(), e.getWorkHour(),e.isAvailability() ? "Yes" : "No");
             }
-        }
+        System.out.println("|---------------------|---------------------|---------------------|------------|------------|");
+
+    }
 
 
 
