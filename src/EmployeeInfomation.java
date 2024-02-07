@@ -12,11 +12,11 @@ public class EmployeeInfomation {
     }
 
     public EmployeeInfomation(String name, String preferred, String skill, int workHour,boolean availabilty) {
-        this.Name = name;
-        this.Preferences = preferred;
-        this.Skill = skill;
-        this.WorkHour = workHour;
-        this.availability = availabilty;
+        Name = name;
+        Preferences = preferred;
+        Skill = skill;
+        WorkHour = workHour;
+        availability = availabilty;
     }
     public String getName() {
         return Name;
