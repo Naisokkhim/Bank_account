@@ -8,7 +8,6 @@ public class EmployeeInfomation {
     private shift shift;
     private boolean availability ;
     public EmployeeInfomation(){
-
     }
 
     public EmployeeInfomation(String name, String preferred, String skill, int workHour,boolean availabilty) {

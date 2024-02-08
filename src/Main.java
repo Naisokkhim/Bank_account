@@ -16,6 +16,7 @@ public class Main {
 
         User user = new User();
         shift Shift = new shift();
+        ArrayList<shift> shifts = new ArrayList<>();
         String post,EmployeeOption,option ;
         do {
 //            System.out.println("=======> Login <=======");
@@ -30,37 +31,40 @@ public class Main {
                 do {
                     System.out.println("\n======> "+post+" <======");
                     System.out.println("1. Create Shift. ");
-                    System.out.println("2. View Shift Schedule. ");
-                    System.out.println("3. View Employee info.");
-                    System.out.println("4. Logout .");
+                    System.out.println("2. View Shift");
+                    System.out.println("3. View Schedule. ");
+                    System.out.println("4. View Employee info.");
+                    System.out.println("5. Logout .");
                     System.out.println("Exit.");
                     System.out.print("Please make a choice : ");
                     option = in.nextLine().toLowerCase();
                     switch (option) {
                         case "1":
                             System.out.println("=====> [ Create Shift ] <=====");
-                            Shift.ShiftToEmployee(employees,in);
+                            Shift.createShift(employees,in,Shift,shifts);
                             break;
-                        case "2":
+                        case "2" : Shift.ShowAllShift();
+                                    break;
+                        case "3":
                             Shift.Show(employees);
                             int ShiftOption;
-                            if(!Shift.getShiftHistory().isEmpty()){
+                            if(!Shift.ShowAllShift()){
                                 System.out.println("1. Show all Shift  ");
                                 System.out.println("2. Back");
                                 System.out.print("Please make a choice : ");
                                 ShiftOption = in.nextInt(); in.nextLine();
                                 if(ShiftOption == 1){
                                     Shift.ShowAllShift();
-                                    Shift.modifyShift(employees,in);
+                                    Shift.modifyShift(employees,in,Shift,shifts);
                                 } else {
                                     System.out.println("========================\n");
                                 }
                             }
                             break;
-                        case "3":
+                        case "4":
                             employeeInfomation.Show(employees);
                             break;
-                        case "4":
+                        case "5":
                             break;
                         case "exit":
                             System.out.println("Exiting System.......");
