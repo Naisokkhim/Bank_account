@@ -8,7 +8,7 @@ public class Main {
         ArrayList<EmployeeInfomation> employees = new ArrayList<>();
         employees.add(new EmployeeInfomation("SokKhim","Remote","Front-end",8,true));
         employees.add(new EmployeeInfomation("Danin","On-site","UX/UI",8,true));
-        employees.add(new EmployeeInfomation("Leak","Remote","Back-end",8,true));
+        employees.add(new EmployeeInfomation("VorLeak","Remote","Back-end",8,true));
         employees.add(new EmployeeInfomation("Channy","On-site","Front-end",8,true));
         employees.add(new EmployeeInfomation("Kisin","On-site","Back-end",8,true));
         employees.add(new EmployeeInfomation("Narin","Remote","Front-end",8,true));
@@ -41,25 +41,13 @@ public class Main {
                     switch (option) {
                         case "1":
                             System.out.println("=====> [ Create Shift ] <=====");
-                            Shift.createShift(employees,in,Shift,shifts);
+                            Shift.createShift(employees,in);
                             break;
                         case "2" : Shift.ShowAllShift();
+                                   Shift.modifyShift(employees,in,Shift);
                                     break;
                         case "3":
                             Shift.Show(employees);
-                            int ShiftOption;
-                            if(!Shift.ShowAllShift()){
-                                System.out.println("1. Show all Shift  ");
-                                System.out.println("2. Back");
-                                System.out.print("Please make a choice : ");
-                                ShiftOption = in.nextInt(); in.nextLine();
-                                if(ShiftOption == 1){
-                                    Shift.ShowAllShift();
-                                    Shift.modifyShift(employees,in,Shift,shifts);
-                                } else {
-                                    System.out.println("========================\n");
-                                }
-                            }
                             break;
                         case "4":
                             employeeInfomation.Show(employees);
