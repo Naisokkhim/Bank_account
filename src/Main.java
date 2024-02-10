@@ -16,7 +16,6 @@ public class Main {
 
         User user = new User();
         shift Shift = new shift();
-        ArrayList<shift> shifts = new ArrayList<>();
         String post,EmployeeOption,option ;
         do {
 //            System.out.println("=======> Login <=======");
@@ -31,21 +30,22 @@ public class Main {
                 do {
                     System.out.println("\n======> "+post+" <======");
                     System.out.println("1. Create Shift. ");
-                    System.out.println("2. View Shift");
+                    System.out.println("2. View Shift ");
                     System.out.println("3. View Schedule. ");
                     System.out.println("4. View Employee info.");
                     System.out.println("5. Logout .");
                     System.out.println("Exit.");
-                    System.out.print("Please make a choice : ");
+                    System.out.print("\u001B[32mPlease make a choice : \u001B[0m");
                     option = in.nextLine().toLowerCase();
                     switch (option) {
                         case "1":
                             System.out.println("=====> [ Create Shift ] <=====");
                             Shift.createShift(employees,in);
                             break;
-                        case "2" : Shift.ShowAllShift();
+                        case "2" :
+                                   Shift.ShowAllShift();
                                    Shift.modifyShift(employees,in,Shift);
-                                    break;
+                                   break;
                         case "3":
                             Shift.Show(employees);
                             break;
