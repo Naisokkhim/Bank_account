@@ -17,8 +17,11 @@ public class Main {
         User user = new User();
         shift Shift = new shift();
         String post,EmployeeOption,option ;
+        //Shift.autoGenerateShift(in);
         do {
-//            System.out.println("=======> Login <=======");
+//            System.out.println("\u001B[32m[]==============================[]\u001B[0m");
+//            System.out.println("\u001B[32m[]      \u001B[34m       Login       \u001B[0m     \u001B[32m[]\u001B[0m");
+//            System.out.println("\u001B[32m[]==============================[]\u001B[0m");
 //            System.out.print("User Name : ");
 //            String Username = in.nextLine();
 //            System.out.print("Password  : ");
@@ -28,12 +31,16 @@ public class Main {
             if (post.equals("Manager")){
 
                 do {
-                    System.out.println("\n======> "+post+" <======");
+                    System.out.println("\n\n");
+                    System.out.println("\u001B[32m[]===============================[]\u001B[0m");
+                    System.out.println("\u001B[32m[]      \u001B[34m      "+post+"       \u001B[0m     \u001B[32m[]\u001B[0m");
+                    System.out.println("\u001B[32m[]===============================[]\u001B[0m");
                     System.out.println("1. Create Shift. ");
-                    System.out.println("2. View Shift ");
-                    System.out.println("3. View Schedule. ");
-                    System.out.println("4. View Employee info.");
-                    System.out.println("5. Logout .");
+                    System.out.println("2. Generate Shift for employee");
+                    System.out.println("3. View Shift ");
+                    System.out.println("4. View Schedule. ");
+                    System.out.println("5. View Employee info.");
+                    System.out.println("6. Logout .");
                     System.out.println("Exit.");
                     System.out.print("\u001B[32mPlease make a choice : \u001B[0m");
                     option = in.nextLine().toLowerCase();
@@ -43,16 +50,19 @@ public class Main {
                             Shift.createShift(employees,in);
                             break;
                         case "2" :
+
+                            break;
+                        case "3" :
                                    Shift.ShowAllShift();
-                                   Shift.modifyShift(employees,in,Shift);
+                                   Shift.modifyShift(employees,in);
                                    break;
-                        case "3":
+                        case "4":
                             Shift.Show(employees);
                             break;
-                        case "4":
+                        case "5":
                             employeeInfomation.Show(employees);
                             break;
-                        case "5":
+                        case "6":
                             break;
                         case "exit":
                             System.out.println("Exiting System.......");

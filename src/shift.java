@@ -8,7 +8,7 @@ public class shift {
     private String breakTime;
     private int TeamMember;
     private String Description;
-    private ArrayList<shift> shifts = new ArrayList<>();
+    private ArrayList<shift> shiftsLists = new ArrayList<>();
     public String getStartToEnd() {
         return startToEnd;
     }
@@ -35,6 +35,7 @@ public class shift {
         this.TeamMember = TeamMember;
         this.Description = Description;
     }
+
     public void createShift(ArrayList<EmployeeInfomation> E, Scanner input) {
         System.out.print("Enter Shift tittle                  : ");
         String ShiftTittle = input.nextLine();
@@ -68,11 +69,11 @@ public class shift {
                 String optionYN = input.nextLine();
                 if (optionYN.equalsIgnoreCase("yes")) {
                     System.out.println("\u001B[32mShift has been Save !!!\u001B[0m");
-                    shifts.add(shift);
+                    shiftsLists.add(shift);
                 } else {
                     System.out.println("\u001B[31mYour Shift have not been saved.\u001B[0m ");
                 }
-            } else shifts.add(shift);
+            } else shiftsLists.add(shift);
         String assignOption;
         do {
             System.out.println("\u001B[32mDo you want to assign to employee now ?\u001B[0m* (\u001B[32mYes\u001B[0m/\u001B[31mNo\u001B[0m ) :");
@@ -99,9 +100,9 @@ public class shift {
     }
 
     public void ShowAllShift(){
-        if(!shifts.isEmpty()){
+        if(!shiftsLists.isEmpty()){
             int i=1;
-            for (shift sh: shifts
+            for (shift sh: shiftsLists
             ) {
                 System.out.println("\n<=============[ N0."+i+" Shift ]=============>");
                 System.out.println("| Shift tittle  : "+sh.getShiftName());
@@ -124,18 +125,18 @@ public class shift {
             }
 
      }
-        if(shifts.isEmpty()){
+        if(shiftsLists.isEmpty()){
             System.out.println("\u001B[32m[]==============================[]\u001B[0m");
             System.out.println("\u001B[32m[]\u001B[0m      \u001B[34mNo shift create yet\u001B[0m     \u001B[32m[]\u001B[0m");
             System.out.println("\u001B[32m[]==============================[]\u001B[0m");
         }
     }
-    public void modifyShift(ArrayList<EmployeeInfomation> Emp,Scanner in,shift shift){
-        if(!shifts.isEmpty()){
-            System.out.println("\n\u001B[32m[]==============================\u001B[0m");
-            System.out.println("1. \u001B[32mDelete Shift\u001B[0m ");
-            System.out.println("2. \u001B[32mUpdate Shift\u001B[0m ");
-            System.out.println("\u001B[31mExit\u001B[0m .");
+    public void modifyShift(ArrayList<EmployeeInfomation> Emp,Scanner in){
+        if(!shiftsLists.isEmpty()){
+            System.out.println("\n\u001B[32m[]============= Option ===========[]\u001B[0m");
+            System.out.println("1. Delete Shift");
+            System.out.println("2. Update Shift");
+            System.out.println("3. Exit.");
             System.out.print("\u001B[32mPlease make a choice : \u001B[0m");
             String optionShift = in.nextLine();
             switch (optionShift){
@@ -149,8 +150,10 @@ public class shift {
                     ShowAllShiftName(" Update Shift ");
                     updateShift(Emp,in);
                     break;
+                case "3" :
                 case "Exit" :
                 case "exit" :
+
                     break;
                 default:
                     System.out.println("\u001B[31m Invalid option !!! \u001B[0m");
@@ -158,7 +161,7 @@ public class shift {
 
         }
     }
-public int availabilityCount(ArrayList<EmployeeInfomation> E){
+    public int availabilityCount(ArrayList<EmployeeInfomation> E){
     int availabilityCount = 0;
     for (EmployeeInfomation e:
             E) {
@@ -211,7 +214,7 @@ public int availabilityCount(ArrayList<EmployeeInfomation> E){
     }
 
     private void updateShift(ArrayList<EmployeeInfomation> E, Scanner in) {
-        if (shifts.isEmpty()) {
+        if (shiftsLists.isEmpty()) {
             System.out.println("The shift list is empty.");
             return;
         }
@@ -226,9 +229,9 @@ public int availabilityCount(ArrayList<EmployeeInfomation> E){
                 if(shiftTittle.equalsIgnoreCase("exit")) {
                 break;
             }
-            for (shiftIndex = 0; shiftIndex < shifts.size(); shiftIndex++) {
-                if (shiftTittle.equalsIgnoreCase(shifts.get(shiftIndex).getShiftName())) {
-                    shiftUpdate = shifts.get(shiftIndex);
+            for (shiftIndex = 0; shiftIndex < shiftsLists.size(); shiftIndex++) {
+                if (shiftTittle.equalsIgnoreCase(shiftsLists.get(shiftIndex).getShiftName())) {
+                    shiftUpdate = shiftsLists.get(shiftIndex);
                 }
             }
 
@@ -275,14 +278,14 @@ public int availabilityCount(ArrayList<EmployeeInfomation> E){
 
                             break;
                         case "2":
-                            for (int indexOfEmployee = 0; indexOfEmployee < E.size() ; indexOfEmployee++){
-                                if(E.get(indexOfEmployee).getShift() != null){
-                                    if (E.get(indexOfEmployee).getShift().getShiftName().equalsIgnoreCase(shiftTittle)){
-                                        System.out.println("-"+E.get(indexOfEmployee).getName());
+                            for (EmployeeInfomation employeeInfomation : E) {
+                                if (employeeInfomation.getShift() != null) {
+                                    if (employeeInfomation.getShift().getShiftName().equalsIgnoreCase(shiftTittle)) {
+                                        System.out.println("-" + employeeInfomation.getName());
                                     }
                                 }
                             }
-                            System.out.println("Which one Employee you want to remove : ");
+                            System.out.println("*Which one Employee you want to remove : ");
                             String removeEmployee = in.nextLine();
                             for (int indexOfEmployee = 0; indexOfEmployee < E.size() ; indexOfEmployee++){
                                 if(E.get(indexOfEmployee).getShift() != null){
@@ -293,22 +296,28 @@ public int availabilityCount(ArrayList<EmployeeInfomation> E){
                                     }
                                 }
                             }
-                            if(!shifts.isEmpty()){
-                                for (shift sh: shifts) {
+                            int count = 0 ;
+                            if(!shiftsLists.isEmpty()){
+                                for (shift sh: shiftsLists) {
                                     Iterator<EmployeeInfomation> iterator = sh.getAssignedEmployees().iterator();
                                     while (iterator.hasNext()) {
                                         EmployeeInfomation emp = iterator.next();
                                         if(removeEmployee.equalsIgnoreCase(emp.getName())){
-                                            System.out.println("\u001B[32m[Successfully Remove "+emp.getName()+" !!]\u001B[0m");
+                                            System.out.println("Successfully Remove \u001B[32m[ "+emp.getName()+" ]\u001B[0m from \u001B[32m[ "+shiftTittle+" ]\u001B[0m Shift !" );
                                             iterator.remove();
+                                            if(shiftTittle.equalsIgnoreCase(sh.getShiftName())){
+                                                int afterRemoveMember = sh.getTeamMember() -1;
+                                                sh.setTeamMember(afterRemoveMember);
+                                            }
+                                            count = 1;
                                             break;
                                         }
                                     }
-                                    if(shiftTittle.equalsIgnoreCase(sh.getShiftName())){
-                                        int afterRemoveMember = sh.getTeamMember() -1;
-                                        sh.setTeamMember(afterRemoveMember);
-                                    }
                                 }
+                                if(count == 0){
+                                    System.out.println("\nNo employee found !!!!\n");
+                                }
+
                             }
                             break;
                         case "Exit":
@@ -348,6 +357,35 @@ public int availabilityCount(ArrayList<EmployeeInfomation> E){
         } while (!shiftTittle.equalsIgnoreCase("exit"));
     }
 
+    public void deleteShift(ArrayList<EmployeeInfomation> Emp,Scanner in,String DeleteShift){
+        int count = 0;
+        for (int index = 0; index < shiftsLists.size(); index++) {
+            shift sh = shiftsLists.get(index);
+            if (sh.getShiftName().equalsIgnoreCase(DeleteShift)) {
+                shiftsLists.remove(index);
+                System.out.println("\u001B[32mShift deleted !!!\u001B[0m");
+                count =1;
+            }
+        }
+        if(count!=1){
+            System.out.println("\u001B[34mNo Shift found !!!\u001B[0m");
+        }
+        for (EmployeeInfomation emp : Emp) {
+            if (emp.getShift() != null && emp.getShift().getShiftName().equalsIgnoreCase(DeleteShift)){
+                emp.setShift(null);
+                emp.setAvailability(true);
+            }
+        }
+    }
+    public void ShowAllShiftName(String OptionName){
+        int ShiftNumber=0;
+        System.out.println("======= \u001B[32m[ "+OptionName+" ]\u001B[0m ======");
+        for (shift sh: shiftsLists
+        ){
+            System.out.println((ShiftNumber+1)+". Shift tittle  : "+sh.getShiftName());
+            ShiftNumber++;
+        }
+    }
     public shift(){}
     public String getShiftName() {
         return ShiftName;
@@ -365,36 +403,15 @@ public int availabilityCount(ArrayList<EmployeeInfomation> E){
         }
         System.out.println("=====================================================================================================");
     }
-    public void ShowAllShiftName(String OptionName){
-        int ShiftNumber=0;
-        System.out.println("======= \u001B[32m[ "+OptionName+" ]\u001B[0m ======");
-        for (shift sh: shifts
-        ){
-            System.out.println((ShiftNumber+1)+". Shift tittle  : "+sh.getShiftName());
-            ShiftNumber++;
-        }
-    }
-    public void deleteShift(ArrayList<EmployeeInfomation> Emp,Scanner in,String DeleteShift){
-        int count = 0;
-        for (int index = 0; index < shifts.size(); index++) {
-            shift sh = shifts.get(index);
-            if (sh.getShiftName().equalsIgnoreCase(DeleteShift)) {
-                shifts.remove(index);
-                System.out.println("\u001B[32mShift deleted !!!\u001B[0m");
-                 count =1;
-            }
-        }
-        if(count!=1){
-            System.out.println("\u001B[34mNo Shift found !!!\u001B[0m");
-        }
-        for (EmployeeInfomation emp : Emp) {
-            if (emp.getShift() != null && emp.getShift().getShiftName().equalsIgnoreCase(DeleteShift)){
-                emp.setShift(null);
-                emp.setAvailability(true);
-            }
-        }
-    }
+    public void autoGenerateShift(Scanner in){
+        System.out.println("\u001B[32m[]==============================[]\u001B[0m");
+        System.out.println("\u001B[32m[]      \u001B[34mAuto Genarate Shift\u001B[0m     \u001B[32m[]\u001B[0m");
+        System.out.println("\u001B[32m[]==============================[]\u001B[0m");
+        System.out.print("\nPlease give a Tittle of the shift : "); String givenTittle = in.nextLine();
+        System.out.println("Maximum of the Team member        : "); int maximumTeam = in.nextInt();
 
+        //shiftsLists.add(new shift());
+    }
     public void setShiftName(String shiftName) {
         ShiftName = shiftName;
     }
