@@ -17,7 +17,6 @@ public class Main {
         User user = new User();
         shift Shift = new shift();
         String post,EmployeeOption,option ;
-        //Shift.autoGenerateShift(in);
         do {
 //            System.out.println("\u001B[32m[]==============================[]\u001B[0m");
 //            System.out.println("\u001B[32m[]      \u001B[34m       Login       \u001B[0m     \u001B[32m[]\u001B[0m");
@@ -50,7 +49,7 @@ public class Main {
                             Shift.createShift(employees,in);
                             break;
                         case "2" :
-
+                            Shift.autoGenerateShift(employees,in);
                             break;
                         case "3" :
                                    Shift.ShowAllShift();

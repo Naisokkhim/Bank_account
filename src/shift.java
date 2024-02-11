@@ -1,7 +1,8 @@
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 public class shift {
     private String ShiftName;
     private String startToEnd;
@@ -39,9 +40,9 @@ public class shift {
     public void createShift(ArrayList<EmployeeInfomation> E, Scanner input) {
         System.out.print("Enter Shift tittle                  : ");
         String ShiftTittle = input.nextLine();
-        System.out.print("Enter Start-End Time (24-hour)      : ");
+        System.out.print("Enter Start-End Time                : ");
         String Start = input.nextLine().toLowerCase();
-        System.out.print("Enter Break Time (24-hour)          : ");
+        System.out.print("Enter Break Time                    : ");
         String BreakTime = input.nextLine().toLowerCase();
         System.out.print("Enter Description                   : ");
         String Description = input.nextLine();
@@ -61,7 +62,7 @@ public class shift {
             System.out.print("Enter valid number :");
             TeamMember = input.nextInt();
         }
-        shift = new shift(ShiftTittle, Start, BreakTime, TeamMember, Description);
+        shift = new shift(ShiftTittle,convertTimeFormat(Start),convertTimeFormat(BreakTime), TeamMember, Description);
         input.nextLine();
             if (!(TeamMember > 0)) {
                 System.out.println("\n============================");
@@ -249,13 +250,13 @@ public class shift {
                     System.out.print("Enter new Start-End : ");
                     String newStartEnd = in.nextLine();
                     System.out.println("*Start-End time  \u001B[31m[ "+shiftUpdate.getStart()+"  ]\u001B[0m has changed to \u001B[32m[ "+newStartEnd+" ]\u001B[0m");
-                    shiftUpdate.setStart(newStartEnd);
+                    shiftUpdate.setStart(convertTimeFormat(newStartEnd));
                     break;
                 case "3":
                     System.out.print("Enter new Break-Time : ");
                     String newBreakTime = in.nextLine();
                     System.out.println("*Break-Time \u001B[31m[ "+shiftUpdate.getBreakTime()+"  ]\u001B[0m has changed to \u001B[32m[ "+newBreakTime+" ]\u001B[0m");
-                    shiftUpdate.setBreakTime(newBreakTime);
+                    shiftUpdate.setBreakTime(convertTimeFormat(newBreakTime));
                     break;
                 case "4":
                     System.out.print("Enter new Description : ");
@@ -333,10 +334,10 @@ public class shift {
                     shiftUpdate.setShiftName(newTittle6);
                     System.out.print("Enter new Start-End : ");
                     String newStartEnd6 = in.nextLine();
-                    shiftUpdate.setStart(newStartEnd6);
+                    shiftUpdate.setStart(convertTimeFormat(newStartEnd6));
                     System.out.print("Enter new Break-Time : ");
                     String newBreakTime6 = in.nextLine();
-                    shiftUpdate.setBreakTime(newBreakTime6);
+                    shiftUpdate.setBreakTime(convertTimeFormat(newBreakTime6));
                     System.out.print("Enter new Description : ");
                     String newDescription6 = in.nextLine();
                     shiftUpdate.setDescription(newDescription6);
@@ -391,26 +392,193 @@ public class shift {
         return ShiftName;
     }
     public void Show(ArrayList<EmployeeInfomation> emArray){
-        System.out.println("===============================[ Shift Schedule for all employee ]================================");
+        System.out.println("===============================[ \u001B[32mDay Shift Schedule \u001B[0m]================================");
         System.out.printf("[%-20s [%-20s [%-20s [%-20s [%-10s%n","EmployeeName]","ShiftName]","Start-End]","BreakTime]","Description]");
+        printShifts(emArray, "7:00am - 5:00pm");
+        System.out.println("=====================================================================================================");
+
+        System.out.println("===============================[ \u001B[32mNight Shift Schedule \u001B[0m]================================");
+        System.out.printf("[%-20s [%-20s [%-20s [%-20s [%-10s%n","EmployeeName]","ShiftName]","Start-End]","BreakTime]","Description]");
+        printShifts(emArray, "4:00pm - 11:00pm");
+        System.out.println("=====================================================================================================");
+    }
+
+    public void printShifts(ArrayList<EmployeeInfomation> emArray, String shiftType){
         for (EmployeeInfomation employee : emArray) {
             shift employeeShift = employee.getShift();
             if (employeeShift != null) {
-                System.out.printf("|%-20s |%-20s |%-20s |%-20s |%-10s%n", employee.getName(), employeeShift.getShiftName(), employeeShift.getStart(), employeeShift.getBreakTime(), employeeShift.getDescription());
+                String shifts = employeeShift.getStartToEnd();
+                if(shifts.equalsIgnoreCase(shiftType)){
+                    System.out.printf("|%-20s |%-20s |%-20s |%-20s |%-10s%n", employee.getName(), employeeShift.getShiftName(), employeeShift.getStart(), employeeShift.getBreakTime(), employeeShift.getDescription());
+                }
             } else {
                 System.out.printf("|%-20s |%-20s |%-20s |%-20s |%-10s%n", employee.getName(), "No shift assigned", "", "", "");
             }
         }
-        System.out.println("=====================================================================================================");
     }
-    public void autoGenerateShift(Scanner in){
+
+
+    public void autoGenerateShift(ArrayList<EmployeeInfomation> em,Scanner in){
+        shift shiftsGen = new shift();
+        int count = 0 ,autoAssign = 0 ,countBackEnd = 0;
+        String startTimeDay = "7:00am-5:00pm",startTimeNight = "4:00pm-11:00pm",breakTimeDay = "11:30am-2:00pm",breakTimeNight = "8:00pm-9:30pm";
+        String frontEndDescription =" code UIs, ensure user-friendliness .";
+        String backEndDescription =" manage databases, implement APIs .";
         System.out.println("\u001B[32m[]==============================[]\u001B[0m");
         System.out.println("\u001B[32m[]      \u001B[34mAuto Genarate Shift\u001B[0m     \u001B[32m[]\u001B[0m");
         System.out.println("\u001B[32m[]==============================[]\u001B[0m");
         System.out.print("\nPlease give a Tittle of the shift : "); String givenTittle = in.nextLine();
-        System.out.println("Maximum of the Team member        : "); int maximumTeam = in.nextInt();
+        int givenMaximumTeam;
+        do {
+            System.out.print("Maximum of the Team member        : "); givenMaximumTeam = in.nextInt();in.nextLine();
+            if(givenMaximumTeam > shiftsGen.availabilityCount(em)){
+                System.out.println("\nWe don't have enough available employee !!");
+                break;
+            }
+        if(givenTittle.toLowerCase().contains("front")){
+            String frontShift =startTimeDay,frontBreak = breakTimeDay;
+            if (givenTittle.toLowerCase().contains("night")){
+                frontShift = startTimeNight;
+                frontBreak = breakTimeNight;
+            }
+            shift shiftsGenFront = new shift(givenTittle,convertTimeFormat(frontShift),convertTimeFormat(frontBreak),givenMaximumTeam,frontEndDescription);
+            count =1;
+            for(int i = 0 ; i < givenMaximumTeam ;i++){
+                int assCount=0;
+                for (EmployeeInfomation E:
+                     em) {
+                    if(E.getSkill().toLowerCase().contains("front-end") || E.getSkill().toLowerCase().contains("ux/ui")){
+                        if(E.isAvailability()){
+                            E.setShift(shiftsGenFront);
+                            assCount = 1;
+                            E.setAvailability(false);
+                            shiftsGenFront.getAssignedEmployees().add(E);
+                            break;
+                        }
 
-        //shiftsLists.add(new shift());
+                    }
+                    if (assCount == 0){
+                        if(E.isAvailability()){
+                            E.setShift(shiftsGenFront);
+                            E.setAvailability(false);
+                            shiftsGenFront.getAssignedEmployees().add(E);
+                            break;
+                        }
+                    }
+                }
+            }
+        shiftsLists.add(shiftsGenFront);
+            System.out.println("\u001B[32m[]==============================[]\u001B[0m");
+            System.out.println("\u001B[32m[]\u001B[0m    \u001B[34mShift has been Create!!\u001B[0m   \u001B[32m[]\u001B[0m");
+            System.out.println("\u001B[32m[]==============================[]\u001B[0m");
+            break;
+        }
+        else if(givenTittle.toLowerCase().contains("back")){
+            String backShift = startTimeDay,backBreak = breakTimeDay;
+            if (givenTittle.toLowerCase().contains("night")){
+                backShift = startTimeNight;
+                backBreak = breakTimeNight;
+            }
+            shift shiftsGenBack = new shift(givenTittle,convertTimeFormat(backShift),convertTimeFormat(backBreak),givenMaximumTeam,backEndDescription);
+            count =1;
+            for(int i = 0 ; i < givenMaximumTeam ;i++){
+                int assCount=0;
+                for (EmployeeInfomation E:
+                        em) {
+                    if(E.getSkill().toLowerCase().contains("back-end")){
+                        if(E.isAvailability()){
+                            E.setShift(shiftsGenBack);
+                            assCount = 1;
+                            E.setAvailability(false);
+                            shiftsGenBack.getAssignedEmployees().add(E);
+                            break;
+                        }
+
+                    }
+                    if (assCount == 0){
+                        if(E.isAvailability()){
+                            E.setShift(shiftsGenBack);
+                            E.setAvailability(false);
+                            shiftsGenBack.getAssignedEmployees().add(E);
+                            break;
+                        }
+                    }
+                }
+            }
+            shiftsLists.add(shiftsGenBack);
+            System.out.println("\u001B[32m[]==============================[]\u001B[0m");
+            System.out.println("\u001B[32m[]\u001B[0m    \u001B[34mShift has been Create!!\u001B[0m   \u001B[32m[]\u001B[0m");
+            System.out.println("\u001B[32m[]==============================[]\u001B[0m");
+            break;
+        }
+        if(count == 0){
+            System.out.print("\n Seem like we don't have employee that skill to the tittle !!" +
+                    "\nDo you want to force create the shift and assign to random employee ? (yes/no) : ");String optionAutoGen = in.nextLine();
+            switch (optionAutoGen.toLowerCase()){
+                case "yes" :
+                    System.out.print("\n\u001B[32mgive description of this shift : \u001B[0m");String givenDescription = in.nextLine();
+                    shiftsGen = new shift(givenTittle,convertTimeFormat("7am-5pm"),convertTimeFormat("11:30am-2:00pm"),givenMaximumTeam,givenDescription);
+                    for(int assignCount = 0; assignCount < givenMaximumTeam ; assignCount++ ){
+                        int countAssgined = 0;
+                        for (EmployeeInfomation emp: em) {
+                            if(emp.isAvailability()){
+                                if((givenDescription.contains("Create button design") && (emp.getSkill().equals("Front-end") || emp.getSkill().equals("UX/UI"))) ||
+                                        (givenDescription.contains("Working on server side , APIs,Database") && emp.getSkill().equals("Back-end"))){
+                                    emp.setAvailability(false);
+                                    emp.setShift(shiftsGen);
+                                    shiftsGen.getAssignedEmployees().add(emp);
+                                    countAssgined = 1 ;
+                                    break;
+                                }
+                                if(countAssgined == 0){
+                                    emp.setAvailability(false);
+                                    emp.setShift(shiftsGen);
+                                    shiftsGen.getAssignedEmployees().add(emp);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    shiftsLists.add(shiftsGen);
+                    System.out.println("\u001B[32m[]==============================[]\u001B[0m");
+                    System.out.println("\u001B[32m[]\u001B[0m    \u001B[34mShift has been Create!!\u001B[0m   \u001B[32m[]\u001B[0m");
+                    System.out.println("\u001B[32m[]==============================[]\u001B[0m");
+                    break;
+                case "no"  :
+                    break;
+                default:
+                    System.out.println("\nInvalid choice !!!!\n");
+            }
+        }
+        }while(shiftsGen.availabilityCount(em) < givenMaximumTeam);
+    }
+    public static String convertTimeFormat(String time) {
+        String[] parts = time.split("-");
+        SimpleDateFormat inputFormat1 = new SimpleDateFormat("h,ma", Locale.ENGLISH);
+        SimpleDateFormat inputFormat2 = new SimpleDateFormat("ha", Locale.ENGLISH);
+        SimpleDateFormat inputFormat3 = new SimpleDateFormat("h:ma", Locale.ENGLISH);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("h:mma", Locale.ENGLISH);
+
+        try {
+            String startTime = outputFormat.format(inputFormat1.parse(parts[0]));
+            String endTime = outputFormat.format(inputFormat1.parse(parts[1]));
+            return startTime + " - " + endTime;
+        } catch (ParseException e) {
+            try {
+                String startTime = outputFormat.format(inputFormat2.parse(parts[0]));
+                String endTime = outputFormat.format(inputFormat2.parse(parts[1]));
+                return startTime + " - " + endTime;
+            } catch (ParseException ex) {
+                try {
+                    String startTime = outputFormat.format(inputFormat3.parse(parts[0]));
+                    String endTime = outputFormat.format(inputFormat3.parse(parts[1]));
+                    return startTime + " - " + endTime;
+                } catch (ParseException exc) {
+                    exc.printStackTrace();
+                    return null;
+                }
+            }
+        }
     }
     public void setShiftName(String shiftName) {
         ShiftName = shiftName;
