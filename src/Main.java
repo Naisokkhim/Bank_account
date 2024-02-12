@@ -18,15 +18,14 @@ public class Main {
         shift Shift = new shift();
         String post,EmployeeOption,option ;
         do {
-//            System.out.println("\u001B[32m[]==============================[]\u001B[0m");
-//            System.out.println("\u001B[32m[]      \u001B[34m       Login       \u001B[0m     \u001B[32m[]\u001B[0m");
-//            System.out.println("\u001B[32m[]==============================[]\u001B[0m");
-//            System.out.print("User Name : ");
-//            String Username = in.nextLine();
-//            System.out.print("Password  : ");
-//            String Password = in.nextLine();
-//            post = user.UserAuthentication(Username,Password,employees);
-            post = "Manager";
+            System.out.println("\u001B[32m[]==============================[]\u001B[0m");
+            System.out.println("\u001B[32m[]      \u001B[34m       Login       \u001B[0m     \u001B[32m[]\u001B[0m");
+            System.out.println("\u001B[32m[]==============================[]\u001B[0m");
+            System.out.print("User Name : ");
+            String Username = in.nextLine();
+            System.out.print("Password  : ");
+            String Password = in.nextLine();
+            post = user.UserAuthentication(Username,Password,employees);
             if (post.equals("Manager")){
 
                 do {
@@ -70,7 +69,7 @@ public class Main {
                             System.out.println("\u001B[31mInvalid option. Please try again.\u001B[0m");
                             break;
                     }
-                } while(!option.equals("4"));
+                } while(!option.equals("6"));
 
             }
             for (EmployeeInfomation em: employees
